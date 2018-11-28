@@ -19,9 +19,9 @@ type FileSystem struct {
 	files map[string]Ent
 }
 
-// MapFileSystem makes a http.FileSystem compatible adapter from an
+// HTTPFileSystem makes a http.FileSystem compatible adapter from an
 // Airfreight map.
-func MapFileSystem(files map[string]Ent) FileSystem {
+func HTTPFileSystem(files map[string]Ent) FileSystem {
 	return FileSystem{files: files}
 }
 

@@ -16,6 +16,6 @@ func main() {
 		panic(err)
 	}
 	fmt.Println("http://" + listener.Addr().String() + "/hello.html")
-	http.Handle("/", http.FileServer(airfreight.MapFileSystem(Static)))
+	http.Handle("/", http.FileServer(airfreight.HTTPFileSystem(Static)))
 	panic(http.Serve(listener, nil))
 }
