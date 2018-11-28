@@ -49,7 +49,7 @@ func (efile *entFile) Read(p []byte) (n int, err error) {
 	return n, nil
 }
 
-func (efile entFile) Seek(offset int64, whence int) (int64, error) {
+func (efile *entFile) Seek(offset int64, whence int) (int64, error) {
 	switch whence {
 	case 0:
 		efile.offset = int(offset)
