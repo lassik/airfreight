@@ -22,7 +22,7 @@ type EntPackage struct {
 	maps map[string]map[string]airfreight.Ent
 }
 
-// Start packing static files into the given Go package.
+// Package starts packing static files into the given Go package.
 //
 // It's ok to have other stuff besides your static files in the same
 // package. The generated code doesn't pollute the package namespace.
@@ -53,7 +53,7 @@ func mapDir(entMap map[string]airfreight.Ent, rootDir, relDir string) {
 	}
 }
 
-// Add one Go map into the package.
+// Map adds one Go map into the package.
 //
 // The map will contain all regular files from the given rootDirs and
 // their subdirectories. However, subdirectories and files whose names
@@ -74,7 +74,7 @@ func (p EntPackage) Map(mapName string, rootDirs ...string) EntPackage {
 	return p
 }
 
-// Write a Go source file for the package into the given Writer.
+// WriteTo writes a Go source file into the given Writer.
 func (p EntPackage) WriteTo(w io.Writer) (int64, error) {
 	var len int64
 	n, err := fmt.Fprintf(w, "// @generated-by airfreight\n\n"+
@@ -110,7 +110,7 @@ func (p EntPackage) WriteTo(w io.Writer) (int64, error) {
 	return len, err
 }
 
-// Write a Go source file for the package into the given .go file.
+// WriteFile writes a Go source file into the given .go file.
 //
 // NOTE: The file will be overwritten if it exists.
 func (p EntPackage) WriteFile(filename string) {
