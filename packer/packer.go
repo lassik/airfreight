@@ -57,20 +57,39 @@ func (p EntPackage) Map(mapName string, rootDirs ...string) EntPackage {
 	return p
 }
 
-func (p EntPackage) WriteTo(w io.Writer) {
-	fmt.Fprintf(w, "// @generated-by airfreight\n\n")
-	fmt.Fprintf(w, "package %s\n\n", p.name)
-	fmt.Fprintf(w, "import \"github.com/lassik/airfreight\"\n")
+func (p EntPackage) WriteTo(w io.Writer) (int64, error) {
+	var len int64
+	n, err := fmt.Fprintf(w, "// @generated-by airfreight\n\n"+
+		"package %s\n\n"+
+		"import \"github.com/lassik/airfreight\"\n", p.name)
+	len += int64(n)
+	if err != nil {
+		return len, err
+	}
 	for mapVar, mapEnts := range p.maps {
-		fmt.Fprintf(w, "\nvar %s = map[string]airfreight.Ent{\n\n", mapVar)
+		n, err = fmt.Fprintf(w,
+			"\nvar %s = map[string]airfreight.Ent{\n\n", mapVar)
+		len += int64(n)
+		if err != nil {
+			return len, err
+		}
 		for entName, ent := range mapEnts {
-			fmt.Fprintf(w, "\t%#v: airfreight.Ent{"+
+			n, err = fmt.Fprintf(w, "\t%#v: airfreight.Ent{"+
 				"ModTime: %#v,"+
 				" Contents: %#v},\n\n",
 				entName, ent.ModTime, ent.Contents)
+			len += int64(n)
+			if err != nil {
+				return len, err
+			}
 		}
-		fmt.Fprintf(w, "}\n")
+		n, err = fmt.Fprintf(w, "}\n")
+		len += int64(n)
+		if err != nil {
+			return len, err
+		}
 	}
+	return len, err
 }
 
 func (p EntPackage) WriteFile(filename string) {
