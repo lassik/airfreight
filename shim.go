@@ -22,10 +22,7 @@ func MapFileSystem(files map[string]Ent) FileSystem {
 }
 
 func (ifs FileSystem) Open(name string) (http.File, error) {
-	if name == "" || name[0] != '/' {
-		return nil, os.ErrNotExist
-	}
-	ent, exists := ifs.files[name[1:]]
+	ent, exists := ifs.files[name]
 	if !exists {
 		return nil, os.ErrNotExist
 	}

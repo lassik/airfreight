@@ -33,9 +33,7 @@ func mapDir(entMap map[string]airfreight.Ent, rootDir, relDir string) {
 		if rel[0] == '.' {
 			continue
 		}
-		if relDir != "" {
-			rel = relDir + "/" + rel
-		}
+		rel = relDir + "/" + rel
 		if info.IsDir() {
 			mapDir(entMap, rootDir, rel)
 		} else {
