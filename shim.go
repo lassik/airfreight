@@ -13,14 +13,19 @@ type entFile struct {
 	offset   int
 }
 
+// FileSystem implements the http.FileSystem interface so Airfreight
+// can be plugged directly into a Go net/http web server.
 type FileSystem struct {
 	files map[string]Ent
 }
 
+// MapFileSystem makes a http.FileSystem compatible adapter from an
+// Airfreight map.
 func MapFileSystem(files map[string]Ent) FileSystem {
 	return FileSystem{files: files}
 }
 
+// Open a file for reading from the Airfreight map.
 func (ifs FileSystem) Open(name string) (http.File, error) {
 	ent, exists := ifs.files[name]
 	if !exists {

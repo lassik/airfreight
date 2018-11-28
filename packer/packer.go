@@ -16,11 +16,17 @@ func check(err error) {
 	}
 }
 
+// An EntPackage represents one .go file while packing.
 type EntPackage struct {
 	name string
 	maps map[string]map[string]airfreight.Ent
 }
 
+// Start packing static files into the given Go package.
+//
+// It's ok to have other stuff besides your static files in the same
+// package. The generated code doesn't pollute the package namespace.
+// It only defines the map names you give to .Map().
 func Package(name string) EntPackage {
 	return EntPackage{name: name, maps: map[string]map[string]airfreight.Ent{}}
 }
@@ -47,6 +53,19 @@ func mapDir(entMap map[string]airfreight.Ent, rootDir, relDir string) {
 	}
 }
 
+// Add one Go map into the package.
+//
+// The map will contain all regular files from the given rootDirs and
+// their subdirectories. However, subdirectories and files whose names
+// start with a dot are ignored.
+//
+// Filenames inside the map do not remember the rootDir from which
+// they came, so if the rootDir "static" contains the file "foo.js",
+// the filename inside the map will be just "/foo.js" instead of
+// "/static/foo.js".
+//
+// The map keys are filenames, and the map values are airfreight.Ent
+// structures.
 func (p EntPackage) Map(mapName string, rootDirs ...string) EntPackage {
 	p.maps[mapName] = map[string]airfreight.Ent{}
 	for _, rootDir := range rootDirs {
@@ -55,6 +74,7 @@ func (p EntPackage) Map(mapName string, rootDirs ...string) EntPackage {
 	return p
 }
 
+// Write a Go source file for the package into the given Writer.
 func (p EntPackage) WriteTo(w io.Writer) (int64, error) {
 	var len int64
 	n, err := fmt.Fprintf(w, "// @generated-by airfreight\n\n"+
@@ -90,6 +110,9 @@ func (p EntPackage) WriteTo(w io.Writer) (int64, error) {
 	return len, err
 }
 
+// Write a Go source file for the package into the given .go file.
+//
+// NOTE: The file will be overwritten if it exists.
 func (p EntPackage) WriteFile(filename string) {
 	file, err := os.Create(filename)
 	check(err)
