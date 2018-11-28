@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type EntFile struct {
+type entFile struct {
 	name     string
 	modTime  int64
 	contents []byte
@@ -26,64 +26,64 @@ func (ifs FileSystem) Open(name string) (http.File, error) {
 	if !exists {
 		return nil, os.ErrNotExist
 	}
-	return &EntFile{name: name, contents: []byte(ent.Contents)}, nil
+	return &entFile{name: name, contents: []byte(ent.Contents)}, nil
 }
 
-func (EntFile) Close() error {
+func (entFile) Close() error {
 	return nil
 }
 
-func (entFile *EntFile) Read(p []byte) (n int, err error) {
-	i := entFile.offset
-	n = len(entFile.contents) - i
+func (efile *entFile) Read(p []byte) (n int, err error) {
+	i := efile.offset
+	n = len(efile.contents) - i
 	if n > cap(p) {
 		n = cap(p)
 	}
-	copy(p, entFile.contents[i:i+n])
-	entFile.offset = i + n
+	copy(p, efile.contents[i:i+n])
+	efile.offset = i + n
 	return n, nil
 }
 
-func (entFile EntFile) Seek(offset int64, whence int) (int64, error) {
+func (efile entFile) Seek(offset int64, whence int) (int64, error) {
 	switch whence {
 	case 0:
-		entFile.offset = int(offset)
+		efile.offset = int(offset)
 	case 1:
-		entFile.offset += int(offset)
+		efile.offset += int(offset)
 	case 2:
-		entFile.offset = len(entFile.contents) + int(offset)
+		efile.offset = len(efile.contents) + int(offset)
 	}
-	return int64(entFile.offset), nil
+	return int64(efile.offset), nil
 }
 
-func (entFile EntFile) Readdir(count int) ([]os.FileInfo, error) {
+func (efile entFile) Readdir(count int) ([]os.FileInfo, error) {
 	return []os.FileInfo{}, nil
 }
 
-func (entFile EntFile) Stat() (os.FileInfo, error) {
-	return entFile, nil
+func (efile entFile) Stat() (os.FileInfo, error) {
+	return efile, nil
 }
 
-func (entFile EntFile) Name() string {
-	return entFile.name
+func (efile entFile) Name() string {
+	return efile.name
 }
 
-func (entFile EntFile) Size() int64 {
-	return int64(len(entFile.contents))
+func (efile entFile) Size() int64 {
+	return int64(len(efile.contents))
 }
 
-func (entFile EntFile) Mode() os.FileMode {
+func (efile entFile) Mode() os.FileMode {
 	return 0644
 }
 
-func (entFile EntFile) ModTime() time.Time {
-	return time.Unix(entFile.modTime, 0)
+func (efile entFile) ModTime() time.Time {
+	return time.Unix(efile.modTime, 0)
 }
 
-func (entFile EntFile) IsDir() bool {
+func (efile entFile) IsDir() bool {
 	return false
 }
 
-func (entFile EntFile) Sys() interface{} {
+func (efile entFile) Sys() interface{} {
 	return nil
 }
