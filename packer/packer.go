@@ -68,15 +68,15 @@ func (p EntPackage) WriteTo(w io.Writer) (int64, error) {
 	}
 	for mapVar, mapEnts := range p.maps {
 		n, err = fmt.Fprintf(w,
-			"\nvar %s = map[string]airfreight.Ent{\n\n", mapVar)
+			"\nvar %s = map[string]airfreight.Ent{\n", mapVar)
 		len += int64(n)
 		if err != nil {
 			return len, err
 		}
 		for entName, ent := range mapEnts {
-			n, err = fmt.Fprintf(w, "\t%#v: airfreight.Ent{"+
+			n, err = fmt.Fprintf(w, "\n\t%#v: airfreight.Ent{"+
 				"ModTime: %#v,"+
-				" Contents: %#v},\n\n",
+				" Contents: %#v},\n",
 				entName, ent.ModTime, ent.Contents)
 			len += int64(n)
 			if err != nil {
