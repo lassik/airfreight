@@ -22,7 +22,7 @@ composable.
 
 - Put your static files in any directories you want.
 
-- Describe them in a trivial `staticgen/main.go` file.
+- Describe them in a trivial [`staticgen/main.go`](example/staticgen/main.go) file.
 
 - Put `//go:generate go run staticgen/main.go` in your real `main.go`.
 
