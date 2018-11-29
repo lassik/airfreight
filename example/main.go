@@ -1,3 +1,5 @@
+// To build this example, run `go generate && go build`.
+
 package main
 
 //go:generate go run staticgen/main.go
