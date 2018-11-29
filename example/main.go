@@ -15,7 +15,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("http://" + listener.Addr().String() + "/hello.html")
+	url := "http://" + listener.Addr().String() + "/hello.html"
+	fmt.Println("By visiting " + url + " you will get this file:")
+	fmt.Println("")
+	fmt.Println(static["/hello.html"].Contents)
 	http.Handle("/", http.FileServer(airfreight.HTTPFileSystem(static)))
 	panic(http.Serve(listener, nil))
 }
