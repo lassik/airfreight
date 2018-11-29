@@ -31,7 +31,11 @@ func (ifs FileSystem) Open(name string) (http.File, error) {
 	if !exists {
 		return nil, os.ErrNotExist
 	}
-	return &entFile{name: name, contents: []byte(ent.Contents)}, nil
+	return &entFile{
+		name:     name,
+		modTime:  ent.ModTime,
+		contents: []byte(ent.Contents),
+	}, nil
 }
 
 func (entFile) Close() error {
