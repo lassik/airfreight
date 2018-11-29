@@ -54,3 +54,22 @@ composable.
   disk during development, you need to add your own
   [`http.FileServer()`](https://golang.org/pkg/net/http/#FileServer)
   as an alternative to Airfreight's shim.
+
+## Continuous integration
+
+### Travis
+
+The default Travis Go build doesn't run `go generate`, tries to run
+`go get` in the `install` step, and doesn't assume the new Go module
+system. Put this in your `.travis.yml` to fix it:
+
+    language: go
+    go:
+      - "1.11"
+    env:
+      - GO111MODULE=on
+    install: []
+    script:
+      - go generate
+      - go build
+      - go test
