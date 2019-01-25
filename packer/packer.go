@@ -105,9 +105,9 @@ func (p EntPackage) WriteTo(w io.Writer) (int64, error) {
 		sort.Strings(entNames)
 		for _, entName := range entNames {
 			ent := mapEnts[entName]
-			n, err = fmt.Fprintf(w, "\n\t%#v: airfreight.Ent{"+
-				"ModTime: %#v,"+
-				" Contents: %#v},\n",
+			n, err = fmt.Fprintf(w, "\n\t%#v: airfreight.Ent{\n"+
+				"\t\tModTime:  %#v,\n"+
+				"\t\tContents: %#v},\n",
 				entName, ent.ModTime, ent.Contents)
 			len += int64(n)
 			if err != nil {
