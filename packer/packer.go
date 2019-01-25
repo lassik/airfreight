@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"sort"
 
 	"github.com/lassik/airfreight"
 )
@@ -84,14 +85,26 @@ func (p EntPackage) WriteTo(w io.Writer) (int64, error) {
 	if err != nil {
 		return len, err
 	}
-	for mapVar, mapEnts := range p.maps {
+	var mapVars []string
+	for mapVar := range p.maps {
+		mapVars = append(mapVars, mapVar)
+	}
+	sort.Strings(mapVars)
+	for _, mapVar := range mapVars {
+		mapEnts := p.maps[mapVar]
 		n, err = fmt.Fprintf(w,
 			"\nvar %s = map[string]airfreight.Ent{\n", mapVar)
 		len += int64(n)
 		if err != nil {
 			return len, err
 		}
-		for entName, ent := range mapEnts {
+		var entNames []string
+		for entName := range mapEnts {
+			entNames = append(entNames, entName)
+		}
+		sort.Strings(entNames)
+		for _, entName := range entNames {
+			ent := mapEnts[entName]
 			n, err = fmt.Fprintf(w, "\n\t%#v: airfreight.Ent{"+
 				"ModTime: %#v,"+
 				" Contents: %#v},\n",
