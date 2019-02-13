@@ -82,7 +82,7 @@ func (efile entFile) Size() int64 {
 }
 
 func (efile entFile) Mode() os.FileMode {
-	return 0644
+	return 0444
 }
 
 func (efile entFile) ModTime() time.Time {
